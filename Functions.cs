@@ -1,7 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+
 namespace TD_Scrabble
 {
     public class Functions
     {
-        
+        public static int GetRandomInt(int min, int max)
+        {
+            var random = new Random();
+            return random.Next(min, max);
+        }
+
+        public static Stack<string> ReadFile(string path)
+        {
+            var lines = new Stack<string>();
+            try
+            {
+                using var sr = new StreamReader(path);
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    lines.Push(line);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+                throw new IOException();
+                
+            }
+
+            return lines;
+        }
+
+        public static void StreamWriter(Stack<string> lines, string path)
+        {
+            try
+            {
+                using var sw = new StreamWriter(path);
+                foreach (var line in lines)
+                {
+                    sw.WriteLine(line);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error has occured while trying to write file");
+                Console.WriteLine(e.Message);
+                throw new IOException();
+            }
+        }
     }
 }
