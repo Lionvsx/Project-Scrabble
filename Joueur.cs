@@ -9,41 +9,42 @@ namespace TD_Scrabble
     /// </summary>
     public class Joueur
     {
-        private string name;
-        private int score;
-        private List<string> words;
-        private List<Jeton> mainCourante;
+        private string _name;
+        private int _score;
+        private List<string> _words;
+        private List<Jeton> _mainCourante;
 
-        public Joueur()
+        public Joueur(List<Jeton> mainCourante)
         {
-            this.words = new List<string>();
-            this.score = 0;
-            this.name = ??
+            this._mainCourante = mainCourante;
+            this._words = new List<string>();
+            this._score = 0;
+            this._name = ??
         }
 
         public void Add_Mot(string mot)
         {
-            this.words.Add(mot);
+            this._words.Add(mot);
         }
 
         public override string ToString()
         {
-            return $"Nom du joueur : {this.name}\nScore : {this.score}\n\nMots trouvés : \n{String.Join('\n', this.words.ToArray())}";
+            return $"Nom du joueur : {this._name}\nScore : {this._score}\n\nMots trouvés : \n{String.Join('\n', this._words.ToArray())}";
         }
 
         public void Add_Score(int val)
         {
-            this.score += val;
+            this._score += val;
         }
 
         public void Add_Main_Courante(Jeton monjeton)
         {
-            this.mainCourante.Add(monjeton);
+            this._mainCourante.Add(monjeton);
         }
 
         public void Remove_Main_Courage(Jeton monjeton)
         {
-            this.mainCourante.Remove(monjeton);
+            this._mainCourante.Remove(monjeton);
         }
     }
 }

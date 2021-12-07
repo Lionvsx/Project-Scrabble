@@ -3,12 +3,12 @@ namespace TD_Scrabble
     public class Jeton
     {
         private char _id;
-        private int scoreValue;
+        private int _scoreValue;
 
         public Jeton(char id, int scoreValue)
         {
             _id = id;
-            this.scoreValue = scoreValue;
+            this._scoreValue = scoreValue;
         }
 
         public char Id
@@ -19,13 +19,13 @@ namespace TD_Scrabble
 
         public int ScoreValue
         {
-            get => scoreValue;
-            set => scoreValue = value;
+            get => _scoreValue;
+            set => _scoreValue = value;
         }
 
         public override string ToString()
         {
-            return "La lettre du jeton est: " + this._id + "\nLe score du jeton est :" + this.scoreValue;
+            return "La lettre du jeton est: " + this._id + "\nLe score du jeton est :" + this._scoreValue;
         }
     }
 }
