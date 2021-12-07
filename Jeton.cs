@@ -22,5 +22,10 @@ namespace TD_Scrabble
             get => scoreValue;
             set => scoreValue = value;
         }
+
+        public string ToString()
+        {
+            return "La lettre du jeton est: " + this._id + "\nLe score du jeton est :" + this.scoreValue;
+        }
     }
 }
