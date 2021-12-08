@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>TD_Scrabble</RootNamespace>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TD_Scrabble
 {
@@ -6,7 +7,7 @@ namespace TD_Scrabble
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            List<string> test = new List<String>();
         }
     }
 }
