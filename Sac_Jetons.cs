@@ -49,6 +49,11 @@ namespace TD_Scrabble
             _content.RemoveAt(randomInt);
             return selectedJeton;
         }
+
+        public override string ToString()
+        {
+            return "Le contenu du sac de jetons : " + this._content;
+        }
     }
     
     
