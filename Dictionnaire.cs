@@ -5,19 +5,19 @@ namespace TD_Scrabble
     public class Dictionnaire
     {
         private string _lang;
-        private int wordLength;
-        private List<string> content;
+        private int _wordLength;
+        private List<string> _words;
 
-        public Dictionnaire(string lang, int wordLength)
+        public Dictionnaire(string lang, int wordLength, List<string> words)
         {
             this._lang = lang;
-            this.wordLength = wordLength;
-            var lines = Functions.ReadFile("../../Français.txt");
+            this._wordLength = wordLength;
+            this._words = words;
         }
 
         public override string ToString()
         {
-            return "Nombre mots qui ont comme longueur : " + this.wordLength + " " + "Langue: " + this._lang;
+            return "Nombre mots qui ont comme longueur : " + this._wordLength + " " + "Langue: " + this._lang;
         }
         
         

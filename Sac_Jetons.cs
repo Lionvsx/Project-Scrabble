@@ -12,7 +12,7 @@ namespace TD_Scrabble
         {
             _content = new List<Jeton>();
             
-            var lines = Functions.ReadFile("../../Jetons.txt");
+            var lines = Functions.ReadFile("../../../Jetons.txt");
             foreach (var args in lines.Select(line => line.Split(';')))
             {
                 for (int count = 0; count < int.Parse(args[2]); count++)

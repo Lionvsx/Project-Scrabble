@@ -1,17 +1,50 @@
+using System;
 using System.Collections.Generic;
 
 namespace TD_Scrabble
 {
     public class Jeu
     {
-        private char[,] board;
-        private List<Joueur> players;
-        private SacJetons bag;
-        private SortedList<int,Dictionnaire> dictionnaries;
+        private char[,] _board;
+        private List<Joueur> _players;
+        private SacJetons _bag;
+        private List<Dictionnaire> _dictionnaries;
 
 
         public Jeu(int nbPlayers)
         {
+            _players = new List<Joueur>();
+            _bag = new SacJetons();
+            _dictionnaries = new List<Dictionnaire>();
+
+            var dictionnaryLines = Functions.ReadFile("../../../Francais.txt");
+            int wordLength = 0;
+            var wordsToAdd = new List<string>();
+            foreach (var line in dictionnaryLines)
+            {
+                if (line.Length == 1)
+                {
+                    if (wordsToAdd.Count != 0) _dictionnaries.Add(new Dictionnaire("fr", wordLength, wordsToAdd));
+                    wordLength = int.Parse(line);
+                    wordsToAdd.Clear();
+                }
+                else
+                {
+                    wordsToAdd.AddRange(line.Split(' '));
+                }
+            }
+
+
+            if (nbPlayers is <= 0 or > 4) throw new ArgumentOutOfRangeException(nameof(nbPlayers));
+            for (int i = 0; i < nbPlayers; i++)
+            {
+                _players.Add(new Joueur($"Player {i+1}"));
+            }
+        }
+        
+        public Jeu(int nbPlayers, int nbIA)
+        {
+            
         }
 
         public Jeu(string boardSavePath, string playersSavePath)

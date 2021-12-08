@@ -7,6 +7,8 @@ namespace TD_Scrabble
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Test");
+            var Jeu = new Jeu(4);
         }
     }
 }
