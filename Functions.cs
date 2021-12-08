@@ -5,7 +5,7 @@ using System.IO;
 
 namespace TD_Scrabble
 {
-    public class Functions
+    public static class Functions
     {
         public static int GetRandomInt(int min, int max)
         {
@@ -36,7 +36,7 @@ namespace TD_Scrabble
             return lines;
         }
 
-        public static void StreamWriter(Stack<string> lines, string path)
+        public static void WriteFile(Stack<string> lines, string path)
         {
             try
             {
