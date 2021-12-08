@@ -52,7 +52,13 @@ namespace TD_Scrabble
 
         public override string ToString()
         {
-            return "Le contenu du sac de jetons : " + this._content;
+            string s = null;
+            for (int i = 0; i < _content.Count; i++)
+            {
+                s += _content[i].ToString() + "\n";
+            }
+
+            return s;
         }
     }
     
