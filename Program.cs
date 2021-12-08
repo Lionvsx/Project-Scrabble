@@ -7,7 +7,6 @@ namespace TD_Scrabble
     {
         static void Main(string[] args)
         {
-            List<string> test = new List<String>();
         }
     }
 }

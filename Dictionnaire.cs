@@ -17,7 +17,7 @@ namespace TD_Scrabble
 
         public override string ToString()
         {
-            return "Nombre mots par longueur: " + this.wordLength + " " + "Langue: " + this._lang;
+            return "Nombre mots qui ont comme longueur : " + this.wordLength + " " + "Langue: " + this._lang;
         }
         
         

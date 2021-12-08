@@ -4,7 +4,7 @@ namespace TD_Scrabble
 {
     public class Jeu
     {
-        private string[,] board;
+        private char[,] board;
         private List<Joueur> players;
         private SacJetons bag;
         private SortedList<int,Dictionnaire> dictionnaries;

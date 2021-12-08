@@ -14,11 +14,11 @@ namespace TD_Scrabble
         private List<string> words;
         private List<Jeton> mainCourante;
 
-        public Joueur()
+        public Joueur(string name)
         {
             this.words = new List<string>();
             this.score = 0;
-            this.name = ??
+            this.name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         public void Add_Mot(string mot)

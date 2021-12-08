@@ -5,6 +5,8 @@ namespace TD_Scrabble
         private char _id;
         private int _scoreValue;
 
+
+
         public Jeton(char id, int scoreValue)
         {
             _id = id;
@@ -22,6 +24,7 @@ namespace TD_Scrabble
             get => _scoreValue;
             set => _scoreValue = value;
         }
+        
 
         public override string ToString()
         {
