@@ -14,6 +14,11 @@ namespace TD_Scrabble
             this.wordLength = wordLength;
             var lines = Functions.ReadFile("../../Français.txt");
         }
+
+        public override string ToString()
+        {
+            return "Nombre mots par longueur: " + this.wordLength + " " + "Langue: " + this._lang;
+        }
         
         
     }
