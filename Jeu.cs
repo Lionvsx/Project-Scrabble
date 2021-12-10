@@ -72,13 +72,36 @@ namespace TD_Scrabble
             }
         }
         
-        public Jeu(int nbPlayers, int nbIA)
+        public Jeu(int nbPlayers, int nbBot)
         {
             
         }
 
         public Jeu(string boardSavePath, string playersSavePath)
         {
+            
+        }
+
+        public void DisplayBoard()
+        {
+            for (int line = 0; line < _board.GetLength(0); line++)
+            {
+                for (int col = 0; col < _board.GetLength(1); col++)
+                {
+                    //Console.SetCursorPosition(line, col);
+                    var letterScoreMultiplier = _board[line, col].LetterScoreMultiplier;
+                    var wordScoreMultiplier = _board[line, col].WordScoreMultiplier;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = wordScoreMultiplier == 3 ? ConsoleColor.Red :
+                        wordScoreMultiplier == 2 ? ConsoleColor.Magenta :
+                        letterScoreMultiplier == 3 ? ConsoleColor.DarkCyan :
+                        letterScoreMultiplier == 2 ? ConsoleColor.Cyan : ConsoleColor.Gray;
+                    Console.Write(_board[line, col].Letter);
+                    Console.Write(" ");
+                    
+                }
+                Console.WriteLine();
+            }
         }
 
         public Case[,] Board

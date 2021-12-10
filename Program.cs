@@ -9,12 +9,9 @@ namespace TD_Scrabble
         {
             Console.WriteLine("Test");
             var Jeu = new Jeu(4);
-            Console.WriteLine(Jeu.Dictionnaries.Count);
-
-            foreach (var dico in Jeu.Dictionnaries)
-            {
-                Console.WriteLine(dico.ToString());
-            }
+            Jeu.DisplayBoard();
+            
+            
         }
     }
 }
