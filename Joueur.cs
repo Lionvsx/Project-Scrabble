@@ -41,7 +41,7 @@ namespace TD_Scrabble
             this.mainCourante.Add(monjeton);
         }
 
-        public void Remove_Main_Courage(Jeton monjeton)
+        public void Remove_Main_Courante(Jeton monjeton)
         {
             this.mainCourante.Remove(monjeton);
         }
