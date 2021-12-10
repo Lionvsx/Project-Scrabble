@@ -21,11 +21,6 @@ namespace TD_Scrabble
             this.name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        public Joueur(string path)
-        {
-            var lines = Function.ReadFile('../../JoueurSauvegarde.txt');
-        }
-
         public void Add_Mot(string mot)
         {
             this.words.Add(mot);
