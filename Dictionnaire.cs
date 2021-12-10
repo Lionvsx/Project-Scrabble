@@ -17,7 +17,7 @@ namespace TD_Scrabble
 
         public override string ToString()
         {
-            return "Nombre mots qui ont comme longueur : " + this._wordLength + " " + "Langue: " + this._lang;
+            return $"Langue: {this._lang}\nLongueur mots: {this._wordLength}\nNombre mots: {this._words.Count}";
         }
         
         

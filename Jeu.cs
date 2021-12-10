@@ -18,19 +18,18 @@ namespace TD_Scrabble
             _dictionnaries = new List<Dictionnaire>();
 
             var dictionnaryLines = Functions.ReadFile("../../../Francais.txt");
-            int wordLength = 0;
             var wordsToAdd = new List<string>();
             foreach (var line in dictionnaryLines)
             {
-                if (line.Length == 1)
+                if (int.TryParse(line, out int value))
                 {
-                    if (wordsToAdd.Count != 0) _dictionnaries.Add(new Dictionnaire("fr", wordLength, wordsToAdd));
-                    wordLength = int.Parse(line);
+                    Console.WriteLine(wordsToAdd.Count);
+                    if (wordsToAdd.Count != 0) _dictionnaries.Add(new Dictionnaire("fr", value, wordsToAdd));
                     wordsToAdd.Clear();
                 }
                 else
                 {
-                    wordsToAdd.AddRange(line.Split(' '));
+                    wordsToAdd.AddRange(line?.Split(' ')!);
                 }
             }
 
@@ -49,6 +48,30 @@ namespace TD_Scrabble
 
         public Jeu(string boardSavePath, string playersSavePath)
         {
+        }
+
+        public char[,] Board
+        {
+            get => _board;
+            set => _board = value;
+        }
+
+        public List<Joueur> Players
+        {
+            get => _players;
+            set => _players = value;
+        }
+
+        public SacJetons Bag
+        {
+            get => _bag;
+            set => _bag = value;
+        }
+
+        public List<Dictionnaire> Dictionnaries
+        {
+            get => _dictionnaries;
+            set => _dictionnaries = value;
         }
     }
 }

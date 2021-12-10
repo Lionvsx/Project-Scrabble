@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 
 namespace TD_Scrabble
@@ -13,7 +14,7 @@ namespace TD_Scrabble
             return random.Next(min, max);
         }
 
-        public static Stack<string> ReadFile(string path)
+        public static IEnumerable<string> ReadFile(string path)
         {
             var lines = new Stack<string>();
             try
@@ -33,7 +34,7 @@ namespace TD_Scrabble
                 
             }
 
-            return lines;
+            return lines.ToArray().Reverse();
         }
 
         public static void WriteFile(Stack<string> lines, string path)
