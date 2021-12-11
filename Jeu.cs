@@ -17,37 +17,9 @@ namespace TD_Scrabble
             _bag = new SacJetons();
             _dictionnaries = new List<Dictionnaire>();
 
-            var standardCase = new Case(1, 1);
-            var doubleLetterCase = new Case(1, 2);
-            var tripleLetterCase = new Case(1, 3);
-            var doubleWordCase = new Case(2, 1);
-            var tripleWordCase = new Case(3, 1);
+            initBoard();
 
-            _board = new Case[15, 15];
-
-            var boardScoreLines = Functions.ReadFile("../../../BoardScore.txt");
-
-            var indexLine = 0;
-            var indexCol = 0;
-            foreach (var line in boardScoreLines)
-            {
-                var args = line.Split(';');
-                foreach (var arg in args)
-                {
-                    _board[indexLine, indexCol] = arg switch
-                    {
-                        "3*" => tripleWordCase,
-                        "2*" => doubleWordCase,
-                        "3" => tripleLetterCase,
-                        "2" => doubleLetterCase,
-                        _ => standardCase
-                    };
-                    ++indexCol;
-                }
-
-                indexCol = 0;
-                ++indexLine;
-            }
+            
             var dictionnaryLines = Functions.ReadFile("../../../Francais.txt");
             var wordsToAdd = new List<string>();
             foreach (var line in dictionnaryLines)
@@ -80,6 +52,41 @@ namespace TD_Scrabble
         public Jeu(string boardSavePath, string playersSavePath)
         {
             
+        }
+
+        public void InitBoard()
+        {
+            var standardCase = new Case(1, 1);
+            var doubleLetterCase = new Case(1, 2);
+            var tripleLetterCase = new Case(1, 3);
+            var doubleWordCase = new Case(2, 1);
+            var tripleWordCase = new Case(3, 1);
+
+            _board = new Case[15, 15];
+
+            var boardScoreLines = Functions.ReadFile("../../../BoardScore.txt");
+
+            var indexLine = 0;
+            var indexCol = 0;
+            foreach (var line in boardScoreLines)
+            {
+                var args = line.Split(';');
+                foreach (var arg in args)
+                {
+                    _board[indexLine, indexCol] = arg switch
+                    {
+                        "3*" => tripleWordCase,
+                        "2*" => doubleWordCase,
+                        "3" => tripleLetterCase,
+                        "2" => doubleLetterCase,
+                        _ => standardCase
+                    };
+                    ++indexCol;
+                }
+
+                indexCol = 0;
+                ++indexLine;
+            }
         }
 
         public void DisplayBoard()
