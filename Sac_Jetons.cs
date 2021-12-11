@@ -46,7 +46,7 @@ namespace TD_Scrabble
         {
             var randomInt = Functions.GetRandomInt(0, _content.Count);
             var selectedJeton = _content[randomInt];
-            _content.RemoveAt(randomInt);
+            _content.RemoveAt(randomInt); 
             return selectedJeton;
         }
 
