@@ -22,11 +22,6 @@ namespace TD_Scrabble
             this._wordLength = wordLength;
             this._words = words;
         }
-        
-        /// <summary>
-        /// methode qui décrit le dictionnaire : nombre de mots, longueur des mots, la langue
-        /// </summary>
-        /// <returns></returns>
 
         public Dictionnaire(Dictionnaire dico)
         {
@@ -34,6 +29,10 @@ namespace TD_Scrabble
             this._words = dico._words;
             this._wordLength = dico._wordLength;
         }
+        /// <summary>
+        /// methode qui décrit le dictionnaire : nombre de mots, longueur des mots, la langue
+        /// </summary>
+        /// <returns> Une chaine de caractère décrivant le dictionnaire </returns>
 
         public override string ToString()
         {
