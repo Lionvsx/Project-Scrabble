@@ -61,5 +61,29 @@ namespace TD_Scrabble
             this.mainCourante.Remove(monjeton);
         }
         
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+
+        public int Score
+        {
+            get => score;
+            set => score = value;
+        }
+
+        public List<string> Words
+        {
+            get => words;
+            set => words = value;
+        }
+
+        public List<Jeton> MainCourante
+        {
+            get => mainCourante;
+            set => mainCourante = value;
+        }
+        
     }
 }
