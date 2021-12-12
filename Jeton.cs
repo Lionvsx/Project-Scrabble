@@ -19,8 +19,11 @@ namespace TD_Scrabble
             _id = char.ToUpper(id);
             this._scoreValue = scoreValue;
         }
+    /// <summary>
+    ///  Accès en consultation et accès en modification
+    /// </summary>
 
-        public char Id
+    public char Id
         {
             get => _id;
             set => _id = value;

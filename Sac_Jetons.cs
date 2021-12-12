@@ -7,7 +7,6 @@ namespace TD_Scrabble
     public class SacJetons
     {
         private List<Jeton> _content;
-
         public SacJetons()
         {
             _content = new List<Jeton>();
@@ -49,7 +48,10 @@ namespace TD_Scrabble
             _content.RemoveAt(randomInt); 
             return selectedJeton;
         }
-
+         /// <summary>
+         /// Méthode qui permet de décrire le contenu du sac jetons
+         /// </summary>
+         /// <returns> Une chaine de caractères décrivant le contenu du sac de jetons </returns>
         public override string ToString()
         {
             string s = null;

@@ -47,11 +47,18 @@ namespace TD_Scrabble
         {
             this.score += val;
         }
-
+       /// <summary>
+       /// Méthode qui permet d'ajouter un jeton à la liste de jetons de la partie en cours
+       /// </summary>
+       /// <param name="monjeton"> paramètre représentant le jeton à ajouter dans liste mainCourante </param>
         public void Add_Main_Courante(Jeton monjeton)
         {
             this.mainCourante.Add(monjeton);
         }
+       /// <summary>
+       /// Méthode qui permet d'enlever un jeton à la liste de jetons de la partie en cours
+       /// </summary>
+       /// <param name="monjeton">paramètre représentant le jeton à supprimer de liste mainCourante </param>
 
         public void Remove_Main_Courante(Jeton monjeton)
         {
