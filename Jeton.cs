@@ -9,7 +9,7 @@ namespace TD_Scrabble
 
         public Jeton(char id, int scoreValue)
         {
-            _id = id;
+            _id = char.ToUpper(id);
             this._scoreValue = scoreValue;
         }
 

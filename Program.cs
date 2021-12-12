@@ -9,9 +9,8 @@ namespace TD_Scrabble
         {
             Console.WriteLine("Test");
             var Jeu = new Jeu(4);
+            Jeu.LoadSave("../../../InstancePlateau.txt");
             Jeu.DisplayBoard();
-            
-            
         }
     }
 }

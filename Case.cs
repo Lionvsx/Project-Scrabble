@@ -23,6 +23,15 @@
 
         public int LetterScoreMultiplier => letterScoreMultiplier;
 
-        public char Letter => letter;
+        public char Letter
+        {
+            get => letter;
+            set => letter = value;
+        }
+
+        public Case Duplicate()
+        {
+            return new Case(this.wordScoreMultiplier, this.letterScoreMultiplier, this.letter);
+        }
     }
 }

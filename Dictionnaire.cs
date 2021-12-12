@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TD_Scrabble
 {
@@ -15,11 +17,27 @@ namespace TD_Scrabble
             this._words = words;
         }
 
+        public Dictionnaire(Dictionnaire dico)
+        {
+            this._lang = dico._lang;
+            this._words = dico._words;
+            this._wordLength = dico._wordLength;
+        }
+
         public override string ToString()
         {
             return $"Langue: {this._lang}\nLongueur mots: {this._wordLength}\nNombre mots: {this._words.Count}";
         }
-        
-        
+
+        public bool Includes(string word)
+        {
+            return _words.Contains(word.ToUpper());
+        }
+
+        public string Lang => _lang;
+
+        public int WordLength => _wordLength;
+
+        public List<string> Words => _words;
     }
 }
