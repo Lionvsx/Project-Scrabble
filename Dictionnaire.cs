@@ -9,6 +9,12 @@ namespace TD_Scrabble
         private string _lang;
         private int _wordLength;
         private List<string> _words;
+        /// <summary>
+        /// Constructeur de la classe Dictionnaire pour les variables d'instances suivantes
+        /// </summary>
+        /// <param name="lang"> string représentant la langue des mots </param>
+        /// <param name="wordLength"> entier représentant la longueur des mots </param>
+        /// <param name="words"> Liste représentant un dictionnaire pour une longueur de mot </param>
 
         public Dictionnaire(string lang, int wordLength, List<string> words)
         {
@@ -16,6 +22,11 @@ namespace TD_Scrabble
             this._wordLength = wordLength;
             this._words = words;
         }
+        
+        /// <summary>
+        /// methode qui décrit le dictionnaire : nombre de mots, longueur des mots, la langue
+        /// </summary>
+        /// <returns></returns>
 
         public Dictionnaire(Dictionnaire dico)
         {
