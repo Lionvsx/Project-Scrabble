@@ -11,6 +11,11 @@ namespace TD_Scrabble
         private List<Joueur> _players;
         private SacJetons _bag;
         private List<Dictionnaire> _dictionnaries;
+        /// <summary>
+        /// Constructeur de la classe Jeu
+        /// </summary>
+        /// <param name="nbPlayers"> Entier représentant le nombre de joueurs</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
 
 
         public Jeu(int nbPlayers)

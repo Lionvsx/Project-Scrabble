@@ -18,10 +18,7 @@ namespace TD_Scrabble
         /// </summary>
         /// <param name="name"> string représentant le nom du joueur</param>
         /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="score"> entier représentant le score du joueur </param>
-        /// <param name="words"> Liste représentant les mots </param>
-        /// <param name="mainCourante"> Liste représentant les jetons de la partie en cours</param>
-        
+
 
         public Joueur(string name)
         {
@@ -42,19 +39,26 @@ namespace TD_Scrabble
             return $"Nom du joueur : {this.name}\nScore : {this.score}\n\nMots trouvés : \n{String.Join('\n', this.words.ToArray())}";
         }
        /// <summary>
-       /// 
+       /// Méthode qui ajoute une valeur au score
        /// </summary>
-       /// <param name="val"></param>
+       /// <param name="val"> entier représentant la valeur ajoutée au score </param>
 
         public void Add_Score(int val)
         {
             this.score += val;
         }
-
+       /// <summary>
+       /// Méthode qui permet d'ajouter un jeton à la liste de jetons de la partie en cours
+       /// </summary>
+       /// <param name="monjeton"> paramètre représentant le jeton à ajouter dans liste mainCourante </param>
         public void Add_Main_Courante(Jeton monjeton)
         {
             this.mainCourante.Add(monjeton);
         }
+       /// <summary>
+       /// Méthode qui permet d'enlever un jeton à la liste de jetons de la partie en cours
+       /// </summary>
+       /// <param name="monjeton">paramètre représentant le jeton à supprimer de liste mainCourante </param>
 
         public void Remove_Main_Courante(Jeton monjeton)
         {
