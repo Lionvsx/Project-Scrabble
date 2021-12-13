@@ -4,7 +4,7 @@
     {
         private int wordScoreMultiplier;
         private int letterScoreMultiplier;
-        private char tempLetter;
+        private char tempLetter = ' ';
         private Jeton jeton;
 
         public Case(int wordScoreMultiplier, int letterScoreMultiplier, char letter)

@@ -20,20 +20,6 @@ namespace TD_Scrabble
                 }
             }
         }
-        
-        public SacJetons(string path)
-        {
-            _content = new List<Jeton>();
-            
-            var lines = Functions.ReadFile(path);
-            foreach (var args in lines.Select(line => line.Split(';')))
-            {
-                for (int count = 0; count < int.Parse(args[2]); count++)
-                {
-                    _content.Add(new Jeton(char.Parse(args[0]), int.Parse(args[1])));
-                }
-            }
-        }
 
         public List<Jeton> Content
         {

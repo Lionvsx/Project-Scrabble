@@ -9,22 +9,10 @@ namespace TD_Scrabble
         private char _direction;
         private int score = 0;
         private int wordScoreMultiplier = 1;
-
-        public PlayerWord(string word, char direction)
-        {
-            this._word = word.ToUpper();
-            this._status = "pending";
-            this._direction = direction;
-        }
+        
         public PlayerWord(char direction)
         {
             this._status = "pending";
-            this._direction = direction;
-        }
-        public PlayerWord(string word, char direction, string status)
-        {
-            this._word = word.ToUpper();
-            this._status = status;
             this._direction = direction;
         }
 

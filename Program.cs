@@ -11,11 +11,11 @@ namespace TD_Scrabble
             mainMenu.Invoke();
             
             
-            var jeu = new Jeu(4);
+            /*var jeu = new Jeu(4);
             jeu.LoadSave("../../../Test.txt");
             jeu.DisplayBoard();
             var joueur1 = jeu.Players.Find(player => player.Name == "Player 1");
-            
+            joueur1.Add_Main_Courante(new Jeton('s', 1));
             joueur1.Add_Main_Courante(new Jeton('e', 1));
             joueur1.Add_Main_Courante(new Jeton('r', 1));
             joueur1.Add_Main_Courante(new Jeton('r', 1));
@@ -27,7 +27,7 @@ namespace TD_Scrabble
             Console.WriteLine(jeu.PlaceWord(2, 0, "serre", "Player 1", 'd'));
             
             Console.WriteLine(joueur1.ToString());
-            jeu.DisplayBoard();
+            jeu.DisplayBoard();*/
         }
     }
 }

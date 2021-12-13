@@ -26,6 +26,7 @@ namespace TD_Scrabble
 
             InitBoard();
             LoadDictionaries();
+            InitPlayerHands();
             
             
 
@@ -45,6 +46,8 @@ namespace TD_Scrabble
 
             InitBoard();
             LoadDictionaries();
+            InitPlayerHands();
+            
         }
         
         public Jeu(int nbPlayers, int nbBot)
@@ -55,6 +58,18 @@ namespace TD_Scrabble
         public Jeu(string boardSavePath, string playersSavePath)
         {
             
+        }
+
+        public void InitPlayerHands()
+        {
+            foreach (var player in _players)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    var jeton = _bag.TakeRandom();
+                    player.Add_Main_Courante(jeton);
+                }
+            }
         }
 
         public void InitBoard()
@@ -163,7 +178,7 @@ namespace TD_Scrabble
             }
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         public bool TestPosition(int x, int y, string word, Joueur player, char direction)
@@ -182,7 +197,7 @@ namespace TD_Scrabble
                 var handJeton = player.MainCourante.Find(jeton => jeton.Id == char.ToUpper(character));
                 if (handJeton == null) return false;
             }
-            
+
             if (direction == 'r')
             {
                 if (!CheckHorizontalWord(x, y, word, player)) return false;
@@ -320,6 +335,16 @@ namespace TD_Scrabble
             return dico == null || dico.Includes(word);
         }
 
+        public void RefillPlayerHand(Joueur player)
+        {
+            for (int i = player.MainCourante.Count - 1; i < 7; i++)
+            {
+                var jeton = _bag.TakeRandom();
+                player.Add_Main_Courante(jeton);
+            }
+        }
+        
+
         public bool PlaceWord(int x, int y, string word, string playerName, char direction)
         {
             var player = Players.Find(player => player.Name == playerName);
@@ -363,6 +388,7 @@ namespace TD_Scrabble
 
                 playerWord.Status = "placed";
                 player.Score += playerWord.Score * playerWord.WordScoreMultiplier;
+                RefillPlayerHand(player);
             }
 
             return true;

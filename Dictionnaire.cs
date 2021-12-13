@@ -70,21 +70,19 @@ namespace TD_Scrabble
 
                 return RechDichoRecursif(debut + 1, fin, word);
             }
-            else
+
+            debut = 0;
+            while(debut<fin)
             {
-                debut = 0;
-                while(debut<fin)
+                if (_words[debut] == word)
                 {
-                    if (_words[debut] == word)
-                    {
-                        return true;
-                    }
-                    if (_words[debut] != word) debut++;
-                   
+                    return true;
                 }
-                return false;
+                if (_words[debut] != word) debut++;
+                   
             }
-           
+            return false;
+
         }
 
 

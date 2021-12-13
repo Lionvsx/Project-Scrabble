@@ -23,6 +23,7 @@ namespace TD_Scrabble
 
         public bool Invoke()
         {
+            Functions.ClearConsole();
             WriteMenu();
             
             ConsoleKeyInfo key;
@@ -96,6 +97,7 @@ namespace TD_Scrabble
             get => _description;
             set => _description = value;
         }
+        
     }
 
     public class Option
