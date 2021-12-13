@@ -26,7 +26,7 @@ namespace TD_Scrabble
     public char Id
         {
             get => _id;
-            set => _id = value;
+            set => _id = char.ToUpper(value);
         }
 
         public int ScoreValue

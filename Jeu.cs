@@ -22,27 +22,12 @@ namespace TD_Scrabble
         {
             _players = new List<Joueur>();
             _bag = new SacJetons();
-            _dictionnaries = new List<Dictionnaire>();
+            
 
             InitBoard();
-
+            LoadDictionaries();
             
-            var dictionaryLines = Functions.ReadFile("../../../Francais.txt").Reverse();
-            var wordsToAdd = new List<string>();
-            foreach (var line in dictionaryLines)
-            {
-                if (int.TryParse(line, out int value))
-                {
-                    _dictionnaries.Add(new Dictionnaire("fr", value, wordsToAdd));
-                    wordsToAdd = new List<string>();
-                }
-                else
-                {
-                    wordsToAdd.AddRange(line.Split(' '));
-                }
-            }
-
-            _dictionnaries.Reverse();
+            
 
 
             if (nbPlayers is <= 0 or > 4) throw new ArgumentOutOfRangeException(nameof(nbPlayers));
@@ -97,6 +82,28 @@ namespace TD_Scrabble
             }
         }
 
+        public void LoadDictionaries()
+        {
+            _dictionnaries = new List<Dictionnaire>();
+            
+            var dictionaryLines = Functions.ReadFile("../../../Francais.txt").Reverse();
+            var wordsToAdd = new List<string>();
+            foreach (var line in dictionaryLines)
+            {
+                if (int.TryParse(line, out int value))
+                {
+                    _dictionnaries.Add(new Dictionnaire("fr", value, wordsToAdd));
+                    wordsToAdd = new List<string>();
+                }
+                else
+                {
+                    wordsToAdd.AddRange(line.Split(' '));
+                }
+            }
+
+            _dictionnaries.Reverse();
+        }
+
         public void LoadSave(string path)
         {
             var boardLines = Functions.ReadFile(path);
@@ -107,7 +114,15 @@ namespace TD_Scrabble
                 var args = line.Split(';');
                 foreach (var arg in args)
                 {
-                    _board[indexLine, indexCol].Letter = arg == "_" ? ' ' : char.Parse(arg);; 
+                    if (arg != "_")
+                    {
+                        var jeton = _bag.RemoveJeton(char.Parse(arg));
+                        _board[indexLine, indexCol].Jeton = jeton;
+                    }
+                    else
+                    {
+                        _board[indexLine, indexCol].Letter = ' ';
+                    }
                     ++indexCol;
                 }
 
@@ -136,36 +151,37 @@ namespace TD_Scrabble
                 }
                 Console.WriteLine();
             }
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
         }
 
         public bool TestPosition(int x, int y, string word, Joueur player, char direction)
         {
             if (direction is not ('d' or 'r')) throw new ArgumentOutOfRangeException(nameof(direction));
             //Check if position is withing board
-            if (x >= _board.GetLength(1) || x < 0 || y < 0 || y > _board.GetLength(0)) return false;
+            if (x >= _board.GetLength(1) || x < 0 || y < 0 || y >= _board.GetLength(0)) return false;
             
 
             if (!CheckWordValid(word)) return false;
-
+            
             //Check if player has required Jetons 
-            // var requiredJetons = GetNeededJeton(x, y, word, direction);
-            // foreach (var character in requiredJetons)
-            // {
-            //     if (player.MainCourante.Find(jeton => jeton.Id == char.ToUpper(character)) == null) return false;
-            // }
+            var requiredJetons = GetNeededJeton(x, y, word, direction);
+            foreach (var character in requiredJetons)
+            {
+                var handJeton = player.MainCourante.Find(jeton => jeton.Id == char.ToUpper(character));
+                if (handJeton == null) return false;
+            }
             
             if (direction == 'r')
             {
-                if (!CheckHorizontalWord(x, y, word)) return false;
+                if (!CheckHorizontalWord(x, y, word, player)) return false;
             }
             else
             {
-                if (CheckVerticalWord(x, y, word)) return false;
+                if (!CheckVerticalWord(x, y, word, player)) return false;
             }
-
-            
-
-
+            player.Add_Mot(word, direction, x, y);
             return true;
 
         }
@@ -183,12 +199,12 @@ namespace TD_Scrabble
             return requiredJetons;
         }
 
-        private bool CheckHorizontalWord(int x, int y, string word)
+        private bool CheckHorizontalWord(int x, int y, string word, Joueur player)
         {
             int wordIndex = 0;
             for (int index = x; index < x + word.Length; index++)
             {
-                char localLetter = word[wordIndex];
+                char localLetter = char.ToUpper(word[wordIndex]);
                 ++wordIndex;
                 Case localCase = _board[y, index];
                 Case proximityCaseUp = y > 0 ? _board[y - 1, index] : null;
@@ -196,9 +212,10 @@ namespace TD_Scrabble
 
                 if (proximityCaseUp != null && proximityCaseDown != null && localCase.Letter == ' ' && (proximityCaseDown.Letter != ' ' || proximityCaseUp.Letter != ' '))
                 {
-                    
-                    var newWord = DiscoverVerticalWord(index, y, localLetter);
+                    var playerWord = player.InitWord('d');
+                    var newWord = DiscoverVerticalWord(index, y, localLetter, playerWord);
                     if (!CheckWordValid(newWord)) return false;
+                    playerWord.Status = "valid";
                 }
 
                 if (localCase.Letter != ' ' && localCase.Letter != localLetter) return false;
@@ -207,77 +224,81 @@ namespace TD_Scrabble
             return true;
         }
         
-        private bool CheckVerticalWord(int x, int y, string word)
+        private bool CheckVerticalWord(int x, int y, string word, Joueur player)
         {
             int wordIndex = 0;
             for (int index = y; index < y + word.Length; index++)
             {
-                char localLetter = word[wordIndex];
+                char localLetter = char.ToUpper(word[wordIndex]);
                 ++wordIndex;
                 Case localCase = _board[index, x];
                 Case proximityCaseLeft = x > 0 ? _board[index, x - 1] : null;
                 Case proximityCaseRight = x < 14 ? _board[index, x + 1] : null;
-                Console.WriteLine($"X : {x}\nY: {index}");
 
                 if (proximityCaseRight != null && proximityCaseLeft != null && localCase.Letter == ' ' && (proximityCaseLeft.Letter != ' ' || proximityCaseRight.Letter != ' '))
                 {
-                    var newWord = DiscoverHorizontalWord(x, index, localLetter);
-                    Console.WriteLine(newWord);
+                    var playerWord = player.InitWord('r');
+                    var newWord = DiscoverHorizontalWord(x, index, localLetter, playerWord);
                     if (!CheckWordValid(newWord)) return false;
+                    playerWord.Status = "valid";
                 }
+                if (localCase.Letter != ' ' && localCase.Letter != localLetter) return false;
             }
 
             return true;
         }
 
-        public string DiscoverVerticalWord(int x, int y, char placeholderLetter)
+        public string DiscoverVerticalWord(int x, int y, char placeholderLetter, PlayerWord playerWord)
         {
-            
-            var startingPosition = y;
+            var index = y;
             var discovery = new List<char>();
-            while (_board[y-1, x].Letter != ' ' && y > 0)
+            _board[y, x].Letter = placeholderLetter;
+            while (index > 0 && _board[index-1, x].Letter != ' ')
             {
-                y -= 1;
+                index -= 1;
             }
 
-            while (_board[y, x].Letter != ' ')
-            {
-                
-                if (y == startingPosition)
-                {
-                    discovery.Add(placeholderLetter);
-                    y += 1;
-                    continue;
-                }
-                discovery.Add(_board[y, x].Letter);
-                y += 1;
-            }
+            playerWord.StartingLine = index;
+            playerWord.StartingColumn = x;
+            
 
-            return new string(discovery.ToArray());
+            while (_board[index, x].Letter != ' ')
+            {
+                discovery.Add(_board[index, x].Letter);
+                index += 1;
+            }
+            _board[y, x].Letter = ' ';
+            var discoveryWord = new string(discovery.ToArray());
+            playerWord.Word = discoveryWord;
+            
+            return discoveryWord;
         }
         
-        private string DiscoverHorizontalWord(int x, int y, char placeholderLetter)
+        private string DiscoverHorizontalWord(int x, int y, char placeholderLetter, PlayerWord playerWord)
         {
-            var startingPosition = x;
+            var index = x;
             var discovery = new List<char>();
-            Console.WriteLine($"Test2\nX : {x}\nY: {y}");
-            _board[startingPosition, y].Letter = placeholderLetter;
-            Console.WriteLine(_board[startingPosition, y].Letter);
-            while (x > 0 && _board[y, x-1].Letter != ' ')
+            _board[y, x].Letter = placeholderLetter;
+            while (index > 0 && _board[y, index-1].Letter != ' ')
             {
-                x -= 1;
+                index -= 1;
             }
             
+            playerWord.StartingLine = y;
+            playerWord.StartingColumn = index;
+            
 
-            while (_board[y, x].Letter != ' ')
+            while (_board[y, index].Letter != ' ')
             {
-                Console.WriteLine(_board[y, x+1].Letter);
-                Console.WriteLine($"Test2\nX : {x}\nY: {y}");
-                discovery.Add(_board[y, x].Letter);
-                x += 1;
+                discovery.Add(_board[y, index].Letter);
+                index += 1;
             }
-            //_board[startingPosition, y].Letter = ' ';
-            return new string(discovery.ToArray());
+            _board[y, x].Letter = ' ';
+            
+            var discoveryWord = new string(discovery.ToArray());
+            playerWord.Word = discoveryWord;
+            
+            return discoveryWord;
         }
 
         public bool CheckWordValid(string word)
@@ -287,6 +308,54 @@ namespace TD_Scrabble
             
             //Check if dictionary has the word
             return dico == null || dico.Includes(word);
+        }
+
+        public bool PlaceWord(int x, int y, string word, string playerName, char direction)
+        {
+            var player = Players.Find(player => player.Name == playerName);
+            if (player == null) throw new ArgumentException("playerName is invalid");
+            if (!TestPosition(x, y, word, player, direction)) return false;
+
+            var wordsToPlace = player.Words.FindAll(playerWord => playerWord.Status == "valid");
+            foreach (var playerWord in wordsToPlace)
+            {
+                switch (playerWord.Direction)
+                {
+                    case 'd':
+                        for (int index = playerWord.StartingLine;
+                            index < playerWord.StartingLine + playerWord.Word.Length;
+                            index++)
+                        {
+                            var character = playerWord.Word[index - playerWord.StartingLine];
+                            _board[index, playerWord.StartingColumn].Jeton ??= player.Remove_Main_Courante(character);
+
+                            playerWord.Score += _board[index, playerWord.StartingColumn].LetterScoreMultiplier *
+                                                _board[index, playerWord.StartingColumn].Jeton.ScoreValue;
+                            playerWord.WordScoreMultiplier *= _board[index, playerWord.StartingColumn]
+                                .WordScoreMultiplier;
+                        }
+                        break;
+                    case 'r':
+                        for (int index = playerWord.StartingColumn;
+                            index < playerWord.StartingColumn + playerWord.Word.Length;
+                            index++)
+                        {
+                            var character = playerWord.Word[index - playerWord.StartingColumn];
+                            _board[playerWord.StartingLine, index].Jeton ??= player.Remove_Main_Courante(character);
+
+                            playerWord.Score += _board[playerWord.StartingLine, index].LetterScoreMultiplier *
+                                                _board[playerWord.StartingLine, index].Jeton.ScoreValue;
+                            playerWord.WordScoreMultiplier *= _board[playerWord.StartingLine, index]
+                                .WordScoreMultiplier;
+                        }
+                        break;
+                }
+
+                playerWord.Status = "placed";
+                player.Score += playerWord.Score * playerWord.WordScoreMultiplier;
+            }
+
+            return true;
         }
         
         
