@@ -7,11 +7,12 @@ namespace TD_Scrabble
     {
         private List<Option> _options;
         private int _index = 0;
-        private string description;
+        private string _description;
 
         public Menu(List<Option> options, string description)
         {
             _options = options;
+            this._description = description;
         }
 
         public Menu()
@@ -20,7 +21,7 @@ namespace TD_Scrabble
 
 
 
-        public void Invoke()
+        public bool Invoke()
         {
             WriteMenu();
             
@@ -49,6 +50,7 @@ namespace TD_Scrabble
                 if (key.Key == ConsoleKey.Enter)
                 {
                     _options[_index].Function.Invoke();
+                    if (_options[_index].Function.Method.Name == "ExitMenu") return false;
                     _index = 0;
                     break;
                 }
@@ -56,26 +58,26 @@ namespace TD_Scrabble
             while (key.Key != ConsoleKey.X);
 
             Console.ReadKey();
+            return true;
         }
         public void WriteMenu()
         {
             Console.Clear();
-            Console.WriteLine(description + "\n");
+            Console.WriteLine(_description + "\n");
             
             foreach (var option in _options)
             {
-                if (_options.IndexOf(option) == _index)
-                {
-                    Console.Write("> ");
-                }
-                else
-                {
-                    Console.Write(" ");
-                }
+                Console.Write(_options.IndexOf(option) == _index ? "> " : " ");
 
                 Console.WriteLine(option.Name);
             }
         }
+        
+        public void ExitMenu()
+        {
+        }
+        
+        
 
         public List<Option> Options
         {
@@ -91,8 +93,8 @@ namespace TD_Scrabble
 
         public string Description
         {
-            get => description;
-            set => description = value;
+            get => _description;
+            set => _description = value;
         }
     }
 

@@ -37,6 +37,16 @@ namespace TD_Scrabble
             }
         }
         
+        public Jeu(IEnumerable<Joueur> playerList)
+        {
+            _players = new List<Joueur>(playerList);
+            _bag = new SacJetons();
+            
+
+            InitBoard();
+            LoadDictionaries();
+        }
+        
         public Jeu(int nbPlayers, int nbBot)
         {
             

@@ -67,9 +67,13 @@ namespace TD_Scrabble
             set => _direction = value;
         }
 
-        public override string ToString()
+        public string ToStringDebug()
         {
             return $"X : {_startingColumn} Y : {_startingLine}  Mot : {_word}  Statut : {_status}  Score : {score}  Mot compte : x{wordScoreMultiplier}";
+        }
+        public override string ToString()
+        {
+            return $"Mot : {_word}  Score : {score*wordScoreMultiplier}";
         }
 
         public int Score

@@ -13,6 +13,7 @@ namespace TD_Scrabble
         private int score;
         private List<PlayerWord> words;
         private List<Jeton> mainCourante;
+        private PlayerMenu menu;
         /// <summary>
         /// Constructeur de la classe joueur pour les variables d'instances suivantes
         /// </summary>
@@ -27,6 +28,7 @@ namespace TD_Scrabble
             this.name = name ?? throw new ArgumentNullException(nameof(name));
             this.mainCourante = new List<Jeton>();
         }
+
         public void Add_Mot(string mot, char direction, int x, int y)
         {
             this.words.Add(new PlayerWord(x, y, mot, "valid", direction));
@@ -43,9 +45,17 @@ namespace TD_Scrabble
        /// </summary>
        /// <returns> Une chaine de caractère qui décrit le joueur </returns>
         public override string ToString()
-        {
-            return $"Nom du joueur : {this.name}\nScore : {this.score}\n\nMots trouvés : \n{this.WordsToString()}";
+       {
+
+           
+           var jetonString = "";
+           foreach (var jeton in mainCourante)
+           {
+               jetonString += $"{jeton.Id}({jeton.ScoreValue}) ";
+           }
+           return $"Nom du joueur : {this.name}\nScore : {this.score}\n\nMots trouvés : \n{this.WordsToString()}\nMain : {jetonString}";
         }
+       
 
        public string WordsToString()
        {
@@ -85,6 +95,12 @@ namespace TD_Scrabble
             mainCourante.Remove(selectedJeton);
             return selectedJeton;
         }
+
+       public void DisplayPlayerInfo()
+       {
+           Console.WriteLine("===== INFO JOUEUR =====");
+           Console.WriteLine(ToString());
+       }
         
         public string Name
         {
@@ -109,6 +125,12 @@ namespace TD_Scrabble
         {
             get => words;
             set => words = value;
+        }
+
+        public PlayerMenu Menu
+        {
+            get => menu;
+            set => menu = value;
         }
     }
 }

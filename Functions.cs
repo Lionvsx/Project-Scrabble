@@ -22,6 +22,12 @@ namespace TD_Scrabble
             Console.Clear();
         }
 
+        public static string Promp(string message)
+        {
+            Console.WriteLine(message);
+            return Console.ReadLine();
+        }
+
         public static IEnumerable<string> ReadFile(string path)
         {
             var lines = new Stack<string>();
