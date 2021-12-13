@@ -8,11 +8,23 @@ namespace TD_Scrabble
         static void Main(string[] args)
         {
             Console.WriteLine("Test");
-            var Jeu = new Jeu(4);
-            Jeu.LoadSave("../../../Test.txt");
-            Jeu.DisplayBoard();
+            var jeu = new Jeu(4);
+            jeu.LoadSave("../../../Test.txt");
+            jeu.DisplayBoard();
+            var joueur1 = jeu.Players.Find(player => player.Name == "Player 1");
             
-            Console.WriteLine(Jeu.TestPosition(2, 0, "serre", "Player 1", 'd'));
+            joueur1.Add_Main_Courante(new Jeton('e', 1));
+            joueur1.Add_Main_Courante(new Jeton('r', 1));
+            joueur1.Add_Main_Courante(new Jeton('r', 1));
+            joueur1.Add_Main_Courante(new Jeton('e', 1));
+            
+            
+            
+            
+            Console.WriteLine(jeu.PlaceWord(2, 0, "serre", "Player 1", 'd'));
+            
+            Console.WriteLine(joueur1.ToString());
+            jeu.DisplayBoard();
         }
     }
 }

@@ -27,9 +27,9 @@ namespace TD_Scrabble
             this.name = name ?? throw new ArgumentNullException(nameof(name));
             this.mainCourante = new List<Jeton>();
         }
-        public void Add_Mot(string mot, char direction)
+        public void Add_Mot(string mot, char direction, int x, int y)
         {
-            this.words.Add(new PlayerWord(mot, direction));
+            this.words.Add(new PlayerWord(x, y, mot, "valid", direction));
         }
 
         public PlayerWord InitWord(char direction)
@@ -74,14 +74,16 @@ namespace TD_Scrabble
         {
             this.mainCourante.Add(monjeton);
         }
+
        /// <summary>
        /// Méthode qui permet d'enlever un jeton à la liste de jetons de la partie en cours
        /// </summary>
-       /// <param name="monjeton">paramètre représentant le jeton à supprimer de liste mainCourante </param>
-
-        public void Remove_Main_Courante(Jeton monjeton)
+       /// <param name="letter"></param>
+       public Jeton Remove_Main_Courante(char letter)
         {
-            this.mainCourante.Remove(monjeton);
+            var selectedJeton = mainCourante.Find(jeton => jeton.Id == char.ToUpper(letter));
+            mainCourante.Remove(selectedJeton);
+            return selectedJeton;
         }
         
         public string Name
@@ -102,6 +104,11 @@ namespace TD_Scrabble
             get => mainCourante;
             set => mainCourante = value;
         }
-        
+
+        public List<PlayerWord> Words
+        {
+            get => words;
+            set => words = value;
+        }
     }
 }
