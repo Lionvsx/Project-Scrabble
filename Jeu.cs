@@ -367,9 +367,7 @@ namespace TD_Scrabble
 
             return true;
         }
-        
-        
-
+      
         public Case[,] Board
         {
             get => _board;

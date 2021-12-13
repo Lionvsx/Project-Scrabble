@@ -33,7 +33,7 @@
 
         public char Letter
         {
-            get => jeton?.Id ?? tempLetter;
+            get => jeton?.Id ?? tempLetter; // Si le jeton existe return id du jeton sinon return tempLetter
             set => tempLetter = value;
         }
 

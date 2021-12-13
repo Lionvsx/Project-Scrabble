@@ -9,6 +9,7 @@ namespace TD_Scrabble
         private string _lang;
         private int _wordLength;
         private List<string> _words;
+
         /// <summary>
         /// Constructeur de la classe Dictionnaire pour les variables d'instances suivantes
         /// </summary>
@@ -28,6 +29,7 @@ namespace TD_Scrabble
             this._words = dico._words;
             this._wordLength = dico._wordLength;
         }
+
         /// <summary>
         /// methode qui décrit le dictionnaire : nombre de mots, longueur des mots, la langue
         /// </summary>
@@ -48,5 +50,43 @@ namespace TD_Scrabble
         public int WordLength => _wordLength;
 
         public List<string> Words => _words;
+
+        public bool RechDichoRecursif(int debut, int fin, string word)
+        {
+
+            if(word.Length<7)
+            {
+
+                if (_words[debut] == word)
+                {
+                    return true;
+                }
+
+                if (debut == fin - 1)
+                {
+                    return false;
+                }
+
+
+                return RechDichoRecursif(debut + 1, fin, word);
+            }
+            else
+            {
+                debut = 0;
+                while(debut<fin)
+                {
+                    if (_words[debut] == word)
+                    {
+                        return true;
+                    }
+                    if (_words[debut] != word) debut++;
+                   
+                }
+                return false;
+            }
+           
+        }
+
+
     }
 }
