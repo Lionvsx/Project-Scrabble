@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace TD_Scrabble
 {
@@ -119,7 +120,7 @@ namespace TD_Scrabble
                     //Console.SetCursorPosition(line, col);
                     var letterScoreMultiplier = _board[line, col].LetterScoreMultiplier;
                     var wordScoreMultiplier = _board[line, col].WordScoreMultiplier;
-                    //Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.BackgroundColor = wordScoreMultiplier == 3 ? ConsoleColor.DarkRed :
                         wordScoreMultiplier == 2 ? ConsoleColor.Red :
                         letterScoreMultiplier == 3 ? ConsoleColor.DarkCyan :
@@ -142,14 +143,39 @@ namespace TD_Scrabble
             if (!CheckWordValid(word)) return false;
 
             //Check if player has required Jetons 
-            foreach (var character in word)
+            // var requiredJetons = GetNeededJeton(x, y, word, direction);
+            // foreach (var character in requiredJetons)
+            // {
+            //     if (player.MainCourante.Find(jeton => jeton.Id == char.ToUpper(character)) == null) return false;
+            // }
+            
+            if (direction == 'r')
             {
-                if (player.MainCourante.Find(jeton => jeton.Id == char.ToUpper(character)) == null) return false;
+                if (!CheckHorizontalWord(x, y, word)) return false;
+            }
+            else
+            {
+                if (CheckVerticalWord(x, y, word)) return false;
             }
 
+            
 
-            return false;
 
+            return true;
+
+        }
+
+        private List<char> GetNeededJeton(int x, int y, string word, char direction)
+        {
+            var requiredJetons = new List<char>();
+            foreach (var character in word)
+            {
+                if (_board[y, x].Letter == ' ') requiredJetons.Add(character);
+                if (direction == 'd') ++y;
+                else ++x;
+            }
+
+            return requiredJetons;
         }
 
         private bool CheckHorizontalWord(int x, int y, string word)
@@ -163,11 +189,14 @@ namespace TD_Scrabble
                 Case proximityCaseUp = y > 0 ? _board[y - 1, index] : null;
                 Case proximityCaseDown = y < 14 ? _board[y + 1, index] : null;
 
-                if (localCase.Letter == ' ' && (proximityCaseDown?.Letter != ' ' || proximityCaseUp?.Letter != ' '))
+                if (proximityCaseUp != null && proximityCaseDown != null && localCase.Letter == ' ' && (proximityCaseDown.Letter != ' ' || proximityCaseUp.Letter != ' '))
                 {
+                    
                     var newWord = DiscoverVerticalWord(index, y, localLetter);
                     if (!CheckWordValid(newWord)) return false;
                 }
+
+                if (localCase.Letter != ' ' && localCase.Letter != localLetter) return false;
             }
 
             return true;
@@ -175,11 +204,30 @@ namespace TD_Scrabble
         
         private bool CheckVerticalWord(int x, int y, string word)
         {
+            int wordIndex = 0;
+            for (int index = y; index < y + word.Length; index++)
+            {
+                char localLetter = word[wordIndex];
+                ++wordIndex;
+                Case localCase = _board[index, x];
+                Case proximityCaseLeft = x > 0 ? _board[index, x - 1] : null;
+                Case proximityCaseRight = x < 14 ? _board[index, x + 1] : null;
+                Console.WriteLine($"X : {x}\nY: {index}");
+
+                if (proximityCaseRight != null && proximityCaseLeft != null && localCase.Letter == ' ' && (proximityCaseLeft.Letter != ' ' || proximityCaseRight.Letter != ' '))
+                {
+                    var newWord = DiscoverHorizontalWord(x, index, localLetter);
+                    Console.WriteLine(newWord);
+                    if (!CheckWordValid(newWord)) return false;
+                }
+            }
+
             return true;
         }
 
-        private string DiscoverVerticalWord(int x, int y, char placeholderLetter)
+        public string DiscoverVerticalWord(int x, int y, char placeholderLetter)
         {
+            
             var startingPosition = y;
             var discovery = new List<char>();
             while (_board[y-1, x].Letter != ' ' && y > 0)
@@ -189,13 +237,15 @@ namespace TD_Scrabble
 
             while (_board[y, x].Letter != ' ')
             {
-                y += 1;
+                
                 if (y == startingPosition)
                 {
                     discovery.Add(placeholderLetter);
+                    y += 1;
                     continue;
                 }
                 discovery.Add(_board[y, x].Letter);
+                y += 1;
             }
 
             return new string(discovery.ToArray());
@@ -205,25 +255,27 @@ namespace TD_Scrabble
         {
             var startingPosition = x;
             var discovery = new List<char>();
-            while (_board[y, x-1].Letter != ' ' && x > 0)
+            Console.WriteLine($"Test2\nX : {x}\nY: {y}");
+            _board[startingPosition, y].Letter = placeholderLetter;
+            Console.WriteLine(_board[startingPosition, y].Letter);
+            while (x > 0 && _board[y, x-1].Letter != ' ')
             {
                 x -= 1;
             }
+            
 
             while (_board[y, x].Letter != ' ')
             {
-                x += 1;
-                if (x == startingPosition)
-                {
-                    discovery.Add(placeholderLetter);
-                    continue;
-                }
+                Console.WriteLine(_board[y, x+1].Letter);
+                Console.WriteLine($"Test2\nX : {x}\nY: {y}");
                 discovery.Add(_board[y, x].Letter);
+                x += 1;
             }
+            //_board[startingPosition, y].Letter = ' ';
             return new string(discovery.ToArray());
         }
 
-        private bool CheckWordValid(string word)
+        public bool CheckWordValid(string word)
         {
             if (word.Length > 15) return false;
             var dico = _dictionnaries.Find(dictionary => dictionary.WordLength == word.Length);

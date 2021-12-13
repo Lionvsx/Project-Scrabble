@@ -8,10 +8,18 @@ namespace TD_Scrabble
 {
     public static class Functions
     {
+
         public static int GetRandomInt(int min, int max)
         {
             var random = new Random();
             return random.Next(min, max);
+        }
+
+        public static void ClearConsole()
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Clear();
         }
 
         public static IEnumerable<string> ReadFile(string path)

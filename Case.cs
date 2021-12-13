@@ -10,7 +10,7 @@
         {
             this.wordScoreMultiplier = wordScoreMultiplier;
             this.letterScoreMultiplier = letterScoreMultiplier;
-            this.letter = letter;
+            this.letter = char.ToUpper(letter);
         }
 
         public Case(int wordScoreMultiplier, int letterScoreMultiplier)
@@ -26,7 +26,7 @@
         public char Letter
         {
             get => letter;
-            set => letter = value;
+            set => letter = char.ToUpper(value);
         }
 
         public Case Duplicate()
