@@ -7,7 +7,10 @@ namespace TD_Scrabble
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Test");
+            var mainMenu = new MainMenu();
+            mainMenu.Invoke();
+            
+            
             var jeu = new Jeu(4);
             jeu.LoadSave("../../../Test.txt");
             jeu.DisplayBoard();

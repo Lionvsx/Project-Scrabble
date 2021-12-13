@@ -15,7 +15,6 @@ namespace TD_Scrabble
         /// <param name="lang"> string représentant la langue des mots </param>
         /// <param name="wordLength"> entier représentant la longueur des mots </param>
         /// <param name="words"> Liste représentant un dictionnaire pour une longueur de mot </param>
-
         public Dictionnaire(string lang, int wordLength, List<string> words)
         {
             this._lang = lang;
