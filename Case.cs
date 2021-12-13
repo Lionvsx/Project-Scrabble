@@ -4,13 +4,21 @@
     {
         private int wordScoreMultiplier;
         private int letterScoreMultiplier;
-        private char letter;
+        private char tempLetter;
+        private Jeton jeton;
 
         public Case(int wordScoreMultiplier, int letterScoreMultiplier, char letter)
         {
             this.wordScoreMultiplier = wordScoreMultiplier;
             this.letterScoreMultiplier = letterScoreMultiplier;
-            this.letter = char.ToUpper(letter);
+            this.tempLetter = char.ToUpper(letter);
+        }
+        
+        public Case(int wordScoreMultiplier, int letterScoreMultiplier, Jeton jeton)
+        {
+            this.wordScoreMultiplier = wordScoreMultiplier;
+            this.letterScoreMultiplier = letterScoreMultiplier;
+            this.jeton = jeton;
         }
 
         public Case(int wordScoreMultiplier, int letterScoreMultiplier)
@@ -25,13 +33,19 @@
 
         public char Letter
         {
-            get => letter;
-            set => letter = char.ToUpper(value);
+            get => jeton?.Id ?? tempLetter;
+            set => tempLetter = value;
+        }
+
+        public Jeton Jeton
+        {
+            get => jeton;
+            set => jeton = value;
         }
 
         public Case Duplicate()
         {
-            return new Case(this.wordScoreMultiplier, this.letterScoreMultiplier, this.letter);
+            return new Case(this.wordScoreMultiplier, this.letterScoreMultiplier, this.Letter);
         }
     }
 }

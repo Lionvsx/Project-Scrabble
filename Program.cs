@@ -12,7 +12,7 @@ namespace TD_Scrabble
             Jeu.LoadSave("../../../Test.txt");
             Jeu.DisplayBoard();
             
-            Console.WriteLine(Jeu.TestPosition(2, 0, "serre", new Joueur("Test"), 'd'));
+            Console.WriteLine(Jeu.TestPosition(2, 0, "serre", "Player 1", 'd'));
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TD_Scrabble
     {
         private string name;
         private int score;
-        private List<string> words;
+        private List<PlayerWord> words;
         private List<Jeton> mainCourante;
         /// <summary>
         /// Constructeur de la classe joueur pour les variables d'instances suivantes
@@ -22,13 +22,21 @@ namespace TD_Scrabble
 
         public Joueur(string name)
         {
-            this.words = new List<string>();
+            this.words = new List<PlayerWord>();
             this.score = 0;
             this.name = name ?? throw new ArgumentNullException(nameof(name));
+            this.mainCourante = new List<Jeton>();
         }
-        public void Add_Mot(string mot)
+        public void Add_Mot(string mot, char direction)
         {
-            this.words.Add(mot);
+            this.words.Add(new PlayerWord(mot, direction));
+        }
+
+        public PlayerWord InitWord(char direction)
+        {
+            var newWord = new PlayerWord(direction);
+            this.words.Add(newWord);
+            return newWord;
         }
        /// <summary>
        /// Méthode qui décrit la classe joueur
@@ -36,8 +44,19 @@ namespace TD_Scrabble
        /// <returns> Une chaine de caractère qui décrit le joueur </returns>
         public override string ToString()
         {
-            return $"Nom du joueur : {this.name}\nScore : {this.score}\n\nMots trouvés : \n{String.Join('\n', this.words.ToArray())}";
+            return $"Nom du joueur : {this.name}\nScore : {this.score}\n\nMots trouvés : \n{this.WordsToString()}";
         }
+
+       public string WordsToString()
+       {
+           var result = "";
+           foreach (var playerWord in words)
+           {
+               result += playerWord.ToString() + "\n";
+           }
+
+           return result;
+       }
        /// <summary>
        /// Méthode qui ajoute une valeur au score
        /// </summary>
@@ -76,12 +95,7 @@ namespace TD_Scrabble
             get => score;
             set => score = value;
         }
-
-        public List<string> Words
-        {
-            get => words;
-            set => words = value;
-        }
+        
 
         public List<Jeton> MainCourante
         {

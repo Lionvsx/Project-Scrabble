@@ -40,6 +40,13 @@ namespace TD_Scrabble
             get => _content;
             set => _content = value;
         }
+        
+        public Jeton RemoveJeton(char letter)
+        {
+            var selectedJeton = _content.Find(jeton => jeton.Id == char.ToUpper(letter));
+            _content.Remove(selectedJeton);
+            return selectedJeton;
+        }
 
         public Jeton TakeRandom()
         {
