@@ -29,8 +29,6 @@ namespace TD_Scrabble
             InitPlayerHands();
             
             
-
-
             if (nbPlayers is <= 0 or > 4) throw new ArgumentOutOfRangeException(nameof(nbPlayers));
             for (int i = 0; i < nbPlayers; i++)
             {
@@ -71,6 +69,9 @@ namespace TD_Scrabble
                 }
             }
         }
+        /// <summary>
+        /// Méthode qui permet d'initialiser un plateau
+        /// </summary>
 
         public void InitBoard()
         {

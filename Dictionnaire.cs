@@ -50,41 +50,7 @@ namespace TD_Scrabble
         public int WordLength => _wordLength;
 
         public List<string> Words => _words;
-
-        public bool RechDichoRecursif(int debut, int fin, string word)
-        {
-
-            if(word.Length<7)
-            {
-
-                if (_words[debut] == word)
-                {
-                    return true;
-                }
-
-                if (debut == fin - 1)
-                {
-                    return false;
-                }
-
-
-                return RechDichoRecursif(debut + 1, fin, word);
-            }
-
-            debut = 0;
-            while(debut<fin)
-            {
-                if (_words[debut] == word)
-                {
-                    return true;
-                }
-                if (_words[debut] != word) debut++;
-                   
-            }
-            return false;
-
-        }
+    }
 
 
     }
-}
