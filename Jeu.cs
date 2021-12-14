@@ -252,6 +252,7 @@ namespace TD_Scrabble
 
                     var newJoker = new Jeton(character, 0);
                     toAddJetons.Add(newJoker);
+                    break;
                 }
                 toAddJetons.Add(handJeton);
             }
@@ -268,7 +269,7 @@ namespace TD_Scrabble
             
             foreach (var jeton in toAddJetons)
             {
-                if (jeton.ScoreValue == 0 && canPlaceWord == false)
+                if ((jeton.ScoreValue == 0) && (canPlaceWord == false))
                 {
                     var joker = new Jeton('*', 0);
                     player.Add_Main_Courante(joker);

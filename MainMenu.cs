@@ -144,6 +144,7 @@ namespace TD_Scrabble
             Console.Clear();
             Console.WriteLine("Sauvegarde chargée avec succès..");
             Console.ReadKey();
+            turn++;
             Invoke();
         }
         
@@ -161,6 +162,13 @@ namespace TD_Scrabble
             var word = Functions.Prompt("Entrez un mot que vous voulez poser sur le plateau : \n");
             var x = int.Parse(Functions.Prompt("A quelle colonne voulez vous rentrer votre mot? (Le plateau commence à la colonne 1)\n")) - 1;
             var y = int.Parse(Functions.Prompt("A quelle ligne voulez vous rentrer votre mot? (Le plateau commence à la ligne 1)\n")) - 1 ;
+            if (x != 8 && y != 8 && turn == 0 && playerTurn == 0)
+            {
+                Console.WriteLine("Vous ne pouvez pas placer un mot ici, le mot doit obligatoirement commencer au centre au début de chaque partie !");
+                Console.ReadKey();
+                PlaceWord();
+                return;
+            }
             Console.WriteLine("Dans quelle direction voulez vous écrire votre mot? (Utilisez les flèches du clavier)");
             var key = Console.ReadKey();
 
@@ -168,10 +176,12 @@ namespace TD_Scrabble
             if (direction == ' ')
             {
                 Console.WriteLine("Direction invalide, veuillez réessayer\nAppuyez sur n'importe quelle touche pour continuer...");
+                Console.ReadKey();
                 PlaceWord();
                 return;
             }
             var success = _jeu.PlaceWord(x, y, word, _jeu.Players[playerTurn].Name, direction);
+            
             if (success == false)
             {
                 Console.WriteLine("Vous ne pouvez pas placer de mot dans cette configuration !\nAppuyez sur n'importe quelle touche pour continuer...");
