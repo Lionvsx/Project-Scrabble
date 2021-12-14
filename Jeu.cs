@@ -155,6 +155,26 @@ namespace TD_Scrabble
                 ++indexLine;
             }
         }
+        
+        public void SaveGame()
+        {
+            List<string> boardLines = new List<string>();
+
+            for (int line = 0; line < _board.GetLength(0); line++)
+            {
+                var boardLine = "";
+                for (int col = 0; col < _board.GetLength(1); col++)
+                {
+                    if (col == _board.GetLength(1) -1) boardLine += _board[line, col].Letter == ' ' ? "_" : _board[line, col].Letter;
+                    else boardLine += (_board[line, col].Letter == ' ' ? "_" : _board[line, col].Letter) + ";";
+                }
+                boardLines.Add(boardLine);
+            }
+            
+            Functions.WriteFile(boardLines, "../../../BoardSave.txt");
+
+            List<string> playerLines = new List<string>();
+        }
 
         public void DisplayBoard()
         {

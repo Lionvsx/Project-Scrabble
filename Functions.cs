@@ -22,7 +22,7 @@ namespace TD_Scrabble
             Console.Clear();
         }
 
-        public static string Promp(string message)
+        public static string Prompt(string message)
         {
             Console.WriteLine(message);
             return Console.ReadLine();
@@ -51,7 +51,7 @@ namespace TD_Scrabble
             return lines.ToArray().Reverse();
         }
 
-        public static void WriteFile(Stack<string> lines, string path)
+        public static void WriteFile(IEnumerable<string> lines, string path)
         {
             try
             {

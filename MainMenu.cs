@@ -17,6 +17,7 @@ namespace TD_Scrabble
             {
                 new Option("Commencer une nouvelle partie", StartGame),
                 new Option("Reprendre la partie", ResumeGame),
+                new Option("Charger une sauvegarde", LoadGame),
                 new Option("Sauvegarder la partie", SaveGame),
                 new Option("Exit", () => Environment.Exit(0))
             };
@@ -26,12 +27,12 @@ namespace TD_Scrabble
         private void StartGame()
         {
             Console.Clear();
-            var nbPlayers = int.Parse(Functions.Promp("Entrez un nombre de joueurs : \n"));
+            var nbPlayers = int.Parse(Functions.Prompt("Entrez un nombre de joueurs : \n"));
             var playerList = new List<Joueur>();
             for (int i = 0; i < nbPlayers; i++)
             {
 
-                var player = new Joueur(Functions.Promp($"Entrez le nom du joueur {i + 1} : \n"));
+                var player = new Joueur(Functions.Prompt($"Entrez le nom du joueur {i + 1} : \n"));
                 player.Menu = new PlayerMenu(player, new List<Option>()
                 {
                     new Option("Placer un mot", PlaceWord),
@@ -81,22 +82,27 @@ namespace TD_Scrabble
 
         public void SaveGame()
         {
-            
+            _jeu.SaveGame();
+            Console.Clear();
+            Console.WriteLine("Partie sauvegardée avec succes..");
         }
 
         public void LoadGame()
         {
-            
+            _jeu.LoadSave("../../../BoardSave.txt");
+            Console.Clear();
+            Console.WriteLine("Sauvegarde chargée avec succès..");
         }
+        
         
         public void PlaceWord()
         {
             
             Console.Clear();
             Console.WriteLine(_jeu.Players[playerTurn].ToString());
-            var word = Functions.Promp("Entrez un mot que vous voulez poser sur le plateau : \n");
-            var x = int.Parse(Functions.Promp("A quelle colonne voulez vous rentrer votre mot? (Le plateau commence à la colonne 1)\n")) - 1;
-            var y = int.Parse(Functions.Promp("A quelle ligne voulez vous rentrer votre mot? (Le plateau commence à la ligne 1)\n")) - 1 ;
+            var word = Functions.Prompt("Entrez un mot que vous voulez poser sur le plateau : \n");
+            var x = int.Parse(Functions.Prompt("A quelle colonne voulez vous rentrer votre mot? (Le plateau commence à la colonne 1)\n")) - 1;
+            var y = int.Parse(Functions.Prompt("A quelle ligne voulez vous rentrer votre mot? (Le plateau commence à la ligne 1)\n")) - 1 ;
             Console.WriteLine("Dans quelle direction voulez vous écrire votre mot? (Utilisez les flèches du clavier)");
             var key = Console.ReadKey();
 
