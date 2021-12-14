@@ -37,6 +37,7 @@ namespace TD_Scrabble
                 {
                     new Option("Placer un mot", PlaceWord),
                     new Option("Passer son tour", SkipTurn),
+                    new Option("Changer sa main", ResetHand),
                     new Option("Retour au menu principal", ExitMenu),
                     new Option("Quitter le jeu", () => Environment.Exit(0))
                 });
@@ -44,6 +45,7 @@ namespace TD_Scrabble
             }
 
             _jeu = new Jeu(playerList);
+            _jeu.InitPlayerHands();
             _playerList = playerList;
             NextTurn();
 
@@ -62,6 +64,8 @@ namespace TD_Scrabble
             else
             {
                 NextTurn();
+
+                Invoke();
             }
         }
 
@@ -89,15 +93,69 @@ namespace TD_Scrabble
 
         public void LoadGame()
         {
-            _jeu.LoadSave("../../../BoardSave.txt");
+            var players = new List<Joueur>();
+            var playerLines = Functions.ReadFile("../../../PlayerSave.txt");
+            foreach (var line in playerLines)
+            {
+                var blocs = line.Split(';');
+                var playerName = blocs[0].Split('|')[0];
+                var playerScore = blocs[0].Split('|')[1];
+                var player = new Joueur(playerName);
+                player.Score = int.Parse(playerScore);
+                player.Menu = new PlayerMenu(player, new List<Option>()
+                {
+                    new Option("Placer un mot", PlaceWord),
+                    new Option("Passer son tour", SkipTurn),
+                    new Option("Changer sa main", ResetHand),
+                    new Option("Retour au menu principal", ExitMenu),
+                    new Option("Quitter le jeu", () => Environment.Exit(0))
+                });
+                players.Add(player);
+            }
+
+            _jeu = new Jeu(players);
+            foreach (var line in playerLines)
+            {
+                var blocs = line.Split(';');
+                var player = _jeu.Players.Find(player => player.Name == blocs[0].Split('|')[0]);
+                
+                
+                foreach (var jetonChar in blocs[1].Split('|'))
+                {
+                    if (!char.TryParse(jetonChar, out char result)) continue;
+                    
+                    var jeton = _jeu.Bag.RemoveJeton(char.Parse(jetonChar));
+                    player?.Add_Main_Courante(jeton);
+                }
+
+                for (int i = 2; i < blocs.Length - 1; i++)
+                {
+                    var playerWordArgs = blocs[i].Split('|');
+                    var playerWord = player.InitWord(char.Parse(playerWordArgs[5]));
+                    playerWord.Score = int.Parse(playerWordArgs[1]);
+                    playerWord.Word = playerWordArgs[0];
+                    playerWord.WordScoreMultiplier = int.Parse(playerWordArgs[2]);
+                    playerWord.StartingLine = int.Parse(playerWordArgs[3]);
+                    playerWord.StartingColumn = int.Parse(playerWordArgs[4]);
+                    playerWord.Status = "placed";
+                }
+            }
+            _jeu.LoadSave();
             Console.Clear();
             Console.WriteLine("Sauvegarde chargée avec succès..");
+            Console.ReadKey();
+            Invoke();
         }
         
         
         public void PlaceWord()
         {
-            
+            if (_jeu.Bag.Content.Count == 0)
+            {
+                Console.Clear();
+                Console.WriteLine($"Partie terminée, plus aucun jeton disponible dans le sac !\n\n====== Leaderboard ======\n{_jeu.GetLeaderboard()}");
+                return;
+            }
             Console.Clear();
             Console.WriteLine(_jeu.Players[playerTurn].ToString());
             var word = Functions.Prompt("Entrez un mot que vous voulez poser sur le plateau : \n");
@@ -125,6 +183,14 @@ namespace TD_Scrabble
                 Console.WriteLine("Mot placé avec succès :\nAppuyez sur n'importe quelle touche pour continuer...");
                 _jeu.DisplayBoard();
             }
+        }
+
+        public void ResetHand()
+        {
+            Functions.ClearConsole();
+            _jeu.ResetHand(_jeu.Players[playerTurn]);
+            Console.WriteLine("Votre main a été remplacée par de nouveaux jetons venant du sac...");
+            
         }
 
         public void SkipTurn()

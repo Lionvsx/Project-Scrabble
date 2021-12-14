@@ -37,7 +37,19 @@ namespace TD_Scrabble
                 _players.Add(new Joueur($"Player {i+1}"));
             }
         }
-        
+
+        public string GetLeaderboard()
+        {
+            var result = "";
+            List<Joueur> sortedList = _players.OrderBy(o=>o.Score).ToList();
+            foreach (var player in sortedList)
+            {
+                result = result + $"{sortedList.IndexOf(player)}. {player.Name} -- {player.Score} pts\n";
+            }
+
+            return result;
+        }
+
         public Jeu(IEnumerable<Joueur> playerList)
         {
             _players = new List<Joueur>(playerList);
@@ -46,8 +58,7 @@ namespace TD_Scrabble
 
             InitBoard();
             LoadDictionaries();
-            InitPlayerHands();
-            
+
         }
         
         public Jeu(int nbPlayers, int nbBot)
@@ -64,13 +75,11 @@ namespace TD_Scrabble
         {
             foreach (var player in _players)
             {
-                for (int i = 0; i < 7; i++)
-                {
-                    var jeton = _bag.TakeRandom();
-                    player.Add_Main_Courante(jeton);
-                }
+                RefillPlayerHand(player);
             }
         }
+
+        #region Loading & Init Functions
 
         public void InitBoard()
         {
@@ -129,9 +138,9 @@ namespace TD_Scrabble
             _dictionnaries.Reverse();
         }
 
-        public void LoadSave(string path)
+        public void LoadSave()
         {
-            var boardLines = Functions.ReadFile(path);
+            var boardLines = Functions.ReadFile("../../../BoardSave.txt");
             var indexLine = 0;
             var indexCol = 0;
             foreach (var line in boardLines)
@@ -174,7 +183,21 @@ namespace TD_Scrabble
             Functions.WriteFile(boardLines, "../../../BoardSave.txt");
 
             List<string> playerLines = new List<string>();
+
+            foreach (var player in _players)
+            {
+                var jetonString = "";
+                foreach (var jeton in player.MainCourante)
+                {
+                    jetonString += $"{jeton.Id}|";
+                }
+                playerLines.Add($"{player.Name}|{player.Score};{jetonString};{player.WordsToSaveString()}");
+            }
+            
+            Functions.WriteFile(playerLines, "../../../PlayerSave.txt");
         }
+
+        #endregion
 
         public void DisplayBoard()
         {
@@ -212,23 +235,56 @@ namespace TD_Scrabble
             
             //Check if player has required Jetons 
             var requiredJetons = GetNeededJeton(x, y, word, direction);
+            var toAddJetons = new List<Jeton>();
+            bool canPlaceWord = true;
             foreach (var character in requiredJetons)
             {
-                var handJeton = player.MainCourante.Find(jeton => jeton.Id == char.ToUpper(character));
-                if (handJeton == null) return false;
+                var handJeton = player.Remove_Main_Courante(character);
+                if (handJeton == null)
+                {
+                    var jokerJeton = player.Remove_Main_Courante('*');
+                    if (jokerJeton == null)
+                    {
+                        canPlaceWord = false;
+                        break;
+                    }
+
+                    var newJoker = new Jeton(character, 0);
+                    toAddJetons.Add(newJoker);
+                }
+                toAddJetons.Add(handJeton);
             }
 
             if (direction == 'r')
             {
-                if (!CheckHorizontalWord(x, y, word, player)) return false;
+                if (!CheckHorizontalWord(x, y, word, player)) canPlaceWord = false;
             }
             else
             {
-                if (!CheckVerticalWord(x, y, word, player)) return false;
+                if (!CheckVerticalWord(x, y, word, player)) canPlaceWord = false;
             }
+            
+            
+            foreach (var jeton in toAddJetons)
+            {
+                if (jeton.ScoreValue == 0 && canPlaceWord == false)
+                {
+                    var joker = new Jeton('*', 0);
+                    player.Add_Main_Courante(joker);
+                }
+                else player.Add_Main_Courante(jeton);
+            }
+            if (canPlaceWord == false) return false;
+            
             player.Add_Mot(word, direction, x, y);
             return true;
 
+        }
+
+        public void ResetHand(Joueur player)
+        {
+            player.MainCourante.Clear();
+            RefillPlayerHand(player);
         }
 
         private List<char> GetNeededJeton(int x, int y, string word, char direction)
@@ -243,6 +299,8 @@ namespace TD_Scrabble
 
             return requiredJetons;
         }
+
+        #region CheckWord Functions
 
         private bool CheckHorizontalWord(int x, int y, string word, Joueur player)
         {
@@ -292,6 +350,10 @@ namespace TD_Scrabble
 
             return true;
         }
+
+        #endregion
+
+        #region Discovery Functions
 
         public string DiscoverVerticalWord(int x, int y, char placeholderLetter, PlayerWord playerWord)
         {
@@ -346,6 +408,8 @@ namespace TD_Scrabble
             return discoveryWord;
         }
 
+        #endregion
+
         public bool CheckWordValid(string word)
         {
             if (word.Length > 15) return false;
@@ -357,7 +421,7 @@ namespace TD_Scrabble
 
         public void RefillPlayerHand(Joueur player)
         {
-            for (int i = player.MainCourante.Count - 1; i < 7; i++)
+            for (int i = player.MainCourante.Count; i < 7; i++)
             {
                 var jeton = _bag.TakeRandom();
                 player.Add_Main_Courante(jeton);

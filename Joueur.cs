@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace TD_Scrabble
 {
@@ -14,30 +13,30 @@ namespace TD_Scrabble
         private List<PlayerWord> words;
         private List<Jeton> mainCourante;
         private PlayerMenu menu;
+        
+        
         /// <summary>
         /// Constructeur de la classe joueur pour les variables d'instances suivantes
         /// </summary>
         /// <param name="name"> string représentant le nom du joueur</param>
         /// <exception cref="ArgumentNullException"></exception>
-
-
         public Joueur(string name)
         {
-            this.words = new List<PlayerWord>();
-            this.score = 0;
+            words = new List<PlayerWord>();
+            score = 0;
             this.name = name ?? throw new ArgumentNullException(nameof(name));
-            this.mainCourante = new List<Jeton>();
+            mainCourante = new List<Jeton>();
         }
 
         public void Add_Mot(string mot, char direction, int x, int y)
         {
-            this.words.Add(new PlayerWord(x, y, mot, "valid", direction));
+            words.Add(new PlayerWord(x, y, mot, "valid", direction));
         }
 
         public PlayerWord InitWord(char direction)
         {
             var newWord = new PlayerWord(direction);
-            this.words.Add(newWord);
+            words.Add(newWord);
             return newWord;
         }
        /// <summary>
@@ -46,23 +45,34 @@ namespace TD_Scrabble
        /// <returns> Une chaine de caractère qui décrit le joueur </returns>
         public override string ToString()
        {
-
-           
            var jetonString = "";
            foreach (var jeton in mainCourante)
            {
                jetonString += $"{jeton.Id}({jeton.ScoreValue}) ";
            }
-           return $"Nom du joueur : {this.name}\nScore : {this.score}\n\nMots trouvés : \n{this.WordsToString()}\nMain : {jetonString}";
+           return $"Nom du joueur : {name}\nScore : {score}\n\nMots trouvés : \n{WordsToString()}\nMain : {jetonString}";
         }
        
 
        public string WordsToString()
        {
            var result = "";
-           foreach (var playerWord in words)
+           var placedWords = words.FindAll(word => word.Status == "placed");
+           foreach (var playerWord in placedWords)
            {
-               result += playerWord.ToString() + "\n";
+               result += playerWord + "\n";
+           }
+
+           return result;
+       }
+       
+       public string WordsToSaveString()
+       {
+           var result = "";
+           var placedWords = words.FindAll(word => word.Status == "placed");
+           foreach (var playerWord in placedWords)
+           {
+               result += $"{playerWord.Word}|{playerWord.Score}|{playerWord.WordScoreMultiplier}|{playerWord.StartingLine}|{playerWord.StartingColumn}|{playerWord.Direction}" + ";";
            }
 
            return result;
@@ -74,7 +84,7 @@ namespace TD_Scrabble
 
         public void Add_Score(int val)
         {
-            this.score += val;
+            score += val;
         }
        /// <summary>
        /// Méthode qui permet d'ajouter un jeton à la liste de jetons de la partie en cours
@@ -82,7 +92,7 @@ namespace TD_Scrabble
        /// <param name="monjeton"> paramètre représentant le jeton à ajouter dans liste mainCourante </param>
         public void Add_Main_Courante(Jeton monjeton)
         {
-            this.mainCourante.Add(monjeton);
+            mainCourante.Add(monjeton);
         }
 
        /// <summary>

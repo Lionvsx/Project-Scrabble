@@ -2,50 +2,50 @@
 {
     public class Case
     {
-        private int wordScoreMultiplier;
-        private int letterScoreMultiplier;
-        private char tempLetter = ' ';
-        private Jeton jeton;
+        private int _wordScoreMultiplier;
+        private int _letterScoreMultiplier;
+        private char _tempLetter = ' ';
+        private Jeton _jeton;
 
         public Case(int wordScoreMultiplier, int letterScoreMultiplier, char letter)
         {
-            this.wordScoreMultiplier = wordScoreMultiplier;
-            this.letterScoreMultiplier = letterScoreMultiplier;
-            this.tempLetter = char.ToUpper(letter);
+            this._wordScoreMultiplier = wordScoreMultiplier;
+            this._letterScoreMultiplier = letterScoreMultiplier;
+            this._tempLetter = char.ToUpper(letter);
         }
         
         public Case(int wordScoreMultiplier, int letterScoreMultiplier, Jeton jeton)
         {
-            this.wordScoreMultiplier = wordScoreMultiplier;
-            this.letterScoreMultiplier = letterScoreMultiplier;
-            this.jeton = jeton;
+            this._wordScoreMultiplier = wordScoreMultiplier;
+            this._letterScoreMultiplier = letterScoreMultiplier;
+            this._jeton = jeton;
         }
 
         public Case(int wordScoreMultiplier, int letterScoreMultiplier)
         {
-            this.wordScoreMultiplier = wordScoreMultiplier;
-            this.letterScoreMultiplier = letterScoreMultiplier;
+            this._wordScoreMultiplier = wordScoreMultiplier;
+            this._letterScoreMultiplier = letterScoreMultiplier;
         }
 
-        public int WordScoreMultiplier => wordScoreMultiplier;
+        public int WordScoreMultiplier => _wordScoreMultiplier;
 
-        public int LetterScoreMultiplier => letterScoreMultiplier;
+        public int LetterScoreMultiplier => _letterScoreMultiplier;
 
         public char Letter
         {
-            get => jeton?.Id ?? tempLetter; // Si le jeton existe return id du jeton sinon return tempLetter
-            set => tempLetter = value;
+            get => _jeton?.Id ?? _tempLetter; // Si le jeton existe return id du jeton sinon return tempLetter
+            set => _tempLetter = value;
         }
 
         public Jeton Jeton
         {
-            get => jeton;
-            set => jeton = value;
+            get => _jeton;
+            set => _jeton = value;
         }
 
         public Case Duplicate()
         {
-            return new Case(this.wordScoreMultiplier, this.letterScoreMultiplier, this.Letter);
+            return new Case(this._wordScoreMultiplier, this._letterScoreMultiplier, this.Letter);
         }
     }
 }
